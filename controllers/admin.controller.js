@@ -1,45 +1,58 @@
-const Admin = require("../model/admin.model");
+const admin_service = require("../services/admin.services");
 
 
 // Create and Save a new Admin
-exports.create = (req, res) => {
-    // Validate request
-    if (!req.body) {
-        res.status(400).send({
-            message: "Content can not be empty!"
-        });
+exports.create = async (req, res) => {
+    try {
+        response = await admin_service.create(req);
+        res.status(200).send({ "message": response });
+    } catch (err) {
+        res.status(400).send({ "error": err });
     }
-
-    // Create a Admin User
-    const admin = new Admin({
-        email: req.body.email,
-        name: req.body.name,
-        pwd: req.body.pwd,
-        isactive: req.body.active
-    });
-
-    // Save Admin in the database
-    Admin.create(admin, (err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while creating the Admin."
-            });
-        else res.send(data);
-    });
 };
 
 
+// Retrieve all Admins from the database.
+exports.findAll = async (req, res) => {
+    try {
+        response = await admin_service.findAll()
+        res.status(200).send({ "message": response })
+    } catch (err) {
+        res.status(400).send({ "error": err })
+    }
 
-// Retrieve all Customers from the database.
-exports.findAll = (req, res) => {
-    Admin.getAll((err, data) => {
-        if (err)
-            res.status(500).send({
-                message:
-                    err.message || "Some error occurred while retrieving customers."
-            });
-        else
-            res.send(data);
-    });
+};
+
+// Update Admins with new info.
+exports.update = async (req, res) => {
+    try {
+        id = req.params.id;
+        response = await admin_service.update(id, req);
+        res.status(200).send({ "message": response });
+    } catch (err) {
+        res.status(400).send({ "error": err });
+    }
+};
+
+// Find specific admin user by email id
+exports.find = async (req, res) => {
+    try {
+        id = req.params.id;
+        response = await admin_service.findById(id);
+        res.status(200).send({ "message": response });
+    } catch (err) {
+        res.status(400).send({ "error": err });
+    }
+};
+
+// Check Admin login user name and password
+exports.validateUser = async (req, res) => {
+    try {
+        email_id = req.body.email;
+        pwd = req.body.pwd;
+        response = await admin_service.checkUserNamePwd(email_id, pwd);
+        res.status(200).send({ "message": response });
+    } catch (err) {
+        res.status(400).send({ "error": err });
+    }
 };

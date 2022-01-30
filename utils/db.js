@@ -1,18 +1,10 @@
-const mysql = require('mysql')
-const dbConfig = require('../config');
+const mongoose = require('mongoose');
+require('dotenv/config')
 
-// Create a connection to the database
-const connection = mysql.createConnection({
-    host: dbConfig.HOST,
-    user: dbConfig.USER,
-    password: dbConfig.PASSWORD,
-    database: dbConfig.DB
+// connect to db
+mongoose.connect(process.env.DB_CONNECTION_STRING, { useNewUrlParser: true }, (err,success) => {
+    if (success)
+        console.log("connected to mongoose");
+    else
+        console.log("couldn't connect to the server ", err)
 });
-
-// open the MySQL connection
-connection.connect(error => {
-    if (error) throw error;
-    console.log("Successfully connected to the database.");
-});
-
-module.exports = connection;

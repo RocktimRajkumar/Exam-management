@@ -1,43 +1,37 @@
-const sql = require('../utils/db');
-const config = require('../config');
+const mongoose = require('mongoose');
 
-// constructor
-const Admin = function (admin) {
-    this.email = admin.email;
-    this.uname = admin.name;
-    this.password = admin.pwd;
-    this.isactive = admin.isactive;
-};
+const AdminSchema = mongoose.Schema({
+    user_id: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    email: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    uname: {
+        type: String,
+        required: true,
+    },
+    password: {
+        type: String,
+        required: true,
+    },
+    is_active: {
+        type: Boolean,
+        default: true
+    },
+    created_date: {
+        type: Date,
+        default: Date.now
+    },
+    updated_date: {
+        type: Date,
+        default: Date.now
+    }
+});
 
-
-Admin.getAll = result => {
-    sql.query("SELECT * FROM admin", (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(null, err);
-            return;
-        }
-
-        console.log("customers: ", res);
-        result(null, res);
-    });
-};
-
-
-Admin.create = (newAdmin, result) => {
-    sql.query("INSERT INTO admin SET ?", newAdmin, (err, res) => {
-        if (err) {
-            console.log("error: ", err);
-            result(err, null);
-            return;
-        }
-
-        console.log("created customer: ", { id: res.insertId, ...newAdmin });
-        result(null, { id: res.insertId, ...newAdmin });
-    });
-};
-
-
-
-module.exports = Admin;
+module.exports = mongoose.model('Admin', AdminSchema);
 
