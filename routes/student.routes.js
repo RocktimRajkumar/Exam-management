@@ -2,7 +2,7 @@ module.exports = app => {
     const student = require("../controllers/student.controller");
 
 
-    // Retrieve all Customers
+    // All operations related to Student
     app.get("/student", student.findAll);
     app.post("/student", student.create);
     app.put("/student/:id", student.update);

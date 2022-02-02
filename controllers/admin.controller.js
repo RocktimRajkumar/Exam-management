@@ -53,6 +53,6 @@ exports.validateUser = async (req, res) => {
         response = await admin_service.checkUserNamePwd(email_id, pwd);
         res.status(200).send({ "message": response });
     } catch (err) {
-        res.status(400).send({ "error": err });
+        res.status(401).send({ "error": err });
     }
 };

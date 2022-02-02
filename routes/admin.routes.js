@@ -1,8 +1,7 @@
 module.exports = app => {
     const admin = require("../controllers/admin.controller");
 
-
-    // Retrieve all Customers
+    // All operations related to Admin
     app.get("/admin", admin.findAll);
     app.post("/admin", admin.create);
     app.put("/admin/:id", admin.update);
