@@ -385,6 +385,142 @@ paths:
                     type: string
                     example: Username or Password not correct
 
+  /department:
+    get:
+      summary: Get Department
+      description: Retrieve list of all department
+      tags:
+        - department
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/Department"
+                  count:
+                    type: integer
+                    example: 1
+    post:
+      summary: Get Department
+      description: Retrieve list of all department
+      tags:
+        - department
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: department
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: Computer Science
+              code:
+                type: string
+                required: true
+                example: CSE
+      responses:
+        200:
+          description: New Department created
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Department Created
+                  dept_id:
+                    type: number
+                    example: 2
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Dept Code already present!
+  /department/{id}:
+    put:
+      summary: Get Department
+      description: Retrieve list of all department
+      tags:
+        - department
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: department
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: CIVIL ENG
+              is_active:
+                type: boolean
+                example: true
+                required: false
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+    get:
+      summary: Get Department by ID
+      description: Get Department detail by providing department ID in the URL path
+      tags:
+        - department
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/Department"
+
 
 # Define components for reuse
 components:
@@ -551,6 +687,33 @@ components:
         password:
           type: string
           example: mypassword
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+    Department:
+      properties:
+        _id:
+          type: string
+          example: 61fad4249216fd31d229745f
+        dept_id:
+          type: integer
+          example: 1
+        dept_name:
+          type: string
+          example: Computer Science
+        dept_code:
+          type: string
+          example: CSE
         is_active:
           type: boolean
           example: true
