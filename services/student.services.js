@@ -18,7 +18,7 @@ exports.create = async (data) => {
     };
 
     if (await userExists(studentObj["email"], studentObj["phone"]))
-        return { "message": "User already exists!" }
+        throw { "message": "User already exists!" }
 
     user_id = await Student.find().sort({ student_id: -1 }).limit(1);
     if (user_id.length) {
@@ -59,7 +59,7 @@ exports.checkUserNamePwd = async (email, pwd) => {
     if (student)
         return { "Login": "Success" }
     else
-        return { "Login": "Username or Password not correct" }
+        throw { "Login": "Username or Password not correct" }
 }
 
 exports.update = async (user_id, data) => {
