@@ -7,7 +7,7 @@ exports.create = async (data) => {
     is_active = data.body.is_active;
 
     if (await userExists(email))
-        return { "message": "User already exists!" }
+        throw { "message": "User already exists!" }
 
     user_id = await Admin.find().sort({ user_id: -1 }).limit(1);
     if (user_id.length) {
@@ -50,7 +50,7 @@ exports.checkUserNamePwd = async (email, pwd) => {
     if (admin)
         return { "Login": "Success" }
     else
-        return { "Login": "Username or Password not correct" }
+        throw { "Login": "Username or Password not correct" }
 }
 
 exports.update = async (user_id, data) => {

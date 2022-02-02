@@ -1,0 +1,567 @@
+swagger: "2.0"
+info:
+  title: Exam Management API
+  version: 1.0.0
+  description: Endpoint to handle all CRUD operation like [admin, student, department, course, semester, marks, generate_marksheet]
+  contact: 
+      name: Rocktim
+      email: rajkumar.rocktim@gmail.com
+      url: https://github.com/RocktimRajkumar/Exam-management
+  license:
+    name: Apache 2.0
+    url: http://apache.org/
+  servers:
+    - url: http://localhost:3000
+      description: This is my local server
+    - url: https://exam-manag.herokuapp.com
+      description: Deployed on heroku server
+
+schemes: [http,https]
+
+paths:
+  /:
+    get:
+      summary: Hello world
+      description: Default path to check the status of the API
+      responses:
+        200:
+          description: Success
+          schema:
+            type: string
+            example: Hello World, from express
+    
+  /admin:
+    get:
+      summary: Get all admins
+      description: List out all the admins user
+      tags:
+        - admin
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/Admin"
+    post:
+      summary: Create admin
+      description: Use to insert a admin user
+      tags:
+        - admin
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: admin
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: admin
+              pwd:
+                type: string
+                required: true
+                example: password
+              email:
+                type: string
+                required: true
+                example: admin@gmail.com
+              is_active:
+                type: boolean
+                example: true
+                required: false
+      responses:
+        200:
+          description: Successfully created admin
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Admin Created
+                  user_id:
+                    type: number
+                    example: 10
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: User already exists!
+  
+  /admin/{id}:
+    put:
+      summary: Update admin
+      description: Endpoint use to update existing admin user
+      tags:
+        - admin
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: admin
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: admin
+              is_active:
+                type: boolean
+                example: true
+                required: false
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+                     
+    get:
+      summary: Get Admin by ID
+      description: Retrieve admin by providing the id
+      tags:
+        - admin
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/Admin"
+
+  /admin/login:
+    post:
+      summary: Validate admin
+      description: Check username and password for admin user
+      tags:
+        - admin
+      parameters:
+        - in: body
+          name: admin_login
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                required: true
+                example: admin@gmail.com
+              pwd:
+                type: string
+                example: password
+                required: true
+      responses:
+        200:
+          description: LogIn Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Login:
+                    type: string
+                    example: Success
+        401:
+          description: LogIn Failed
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  Login:
+                    type: string
+                    example: Username or Password not correct
+
+  /student:
+    get:
+      summary: Get Student
+      description: Retrieve list of all student
+      tags:
+        - student
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/Student"
+                  count:
+                    type: integer
+                    example: 4
+    post:
+      summary: Create Student
+      description: Create a new student
+      tags:
+        - student
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: student
+          schema:
+            $ref: "#/components/schemas/StudentPost"
+      responses:
+        200:
+          description: Successfully created admin
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Student Created
+                  user_id:
+                    type: number
+                    example: 44
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: User already exists!
+  
+  /student/{id}:
+    put:
+      summary: Update student by ID
+      description: Update student detail by providing the student id
+      tags:
+        - student
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: student
+          schema:
+            $ref: "#/components/schemas/StudentPut"
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+    
+    get:
+      summary: Get student by ID
+      description: Get specific student detail by providing the student id
+      tags:
+        - student
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/Student"
+
+  /student/login:
+    post:
+      summary: Validate student
+      description: Check username and password for student user
+      tags:
+        - student
+      parameters:
+        - in: body
+          name: student_login
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                required: true
+                example: steve@gmail.com
+              pwd:
+                type: string
+                example: I am captain america
+                required: true
+      responses:
+        200:
+          description: LogIn Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Login:
+                    type: string
+                    example: Success
+        401:
+          description: LogIn Failed
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  Login:
+                    type: string
+                    example: Username or Password not correct
+
+
+# Define components for reuse
+components:
+  schemas:
+    Student:
+      properties:
+        _id:
+          type: string
+          example: 61f67b7d5b4971badae787cc
+        student_id:
+          type: integer
+          example: 4
+        s_name:
+          type: string
+          example: Peter Parker
+        state:
+          type: string
+          example: assam
+        pincode:
+          type: string
+          example: 785001
+        district:
+          type: string
+          example: Jorhat
+        city:
+          type: string
+          example: Jorhat
+        phone:
+          type: string
+          example: 9876543210
+        email:
+          type: string
+          example: peter@gmail.com
+        gender:
+          type: string
+          example: male
+        dob:
+          type: string
+          description: date of birth
+          example: 2002-12-01T18:30:00.000Z
+          format: date-time
+        dept_id:
+          type: integer
+          example: 1
+        batch:
+          type: string
+          example: 2015
+        rollno:
+          type: integer
+          example: 2
+        password:
+          type: string
+          example: I am spiderman
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+    StudentPost:
+      properties:
+        name:
+          type: string
+          example: Natasha
+        state:
+          type: string
+          example: assam
+        pincode:
+          type: string
+          example: 785001
+        district:
+          type: string
+          example: Jorhat
+        city:
+          type: string
+          example: Jorhat
+        phone:
+          type: string
+          example: 9876543210
+        email:
+          type: string
+          example: natasha@gmail.com
+        gender:
+          type: string
+          example: male
+        dob:
+          type: string
+          description: date of birth
+          example: 2002-12-01T18:30:00.000Z
+          format: date-time
+        dept_id:
+          type: integer
+          example: 1
+        batch:
+          type: string
+          example: 2018
+        rollno:
+          type: integer
+          example: 2
+        pwd:
+          type: string
+          example: I am black widow
+    StudentPut:
+      properties:
+        name:
+          type: string
+          example: Steve
+        state:
+          type: string
+          example: assam
+        pincode:
+          type: string
+          example: 781001
+        district:
+          type: string
+          example: Guwahati
+        city:
+          type: string
+          example: Guwahati
+        gender:
+          type: string
+          example: male
+        dob:
+          type: string
+          description: date of birth
+          example: 2002-18-01T18:30:00.000Z
+          format: date-time
+        dept_id:
+          type: integer
+          example: 7
+        batch:
+          type: string
+          example: 2020
+        rollno:
+          type: integer
+          example: 2
+        pwd:
+          type: string
+          example: I am black widow
+        is_active:
+          type: boolean
+          example: false
+    Admin:
+      properties:
+        _id:
+          type: string
+          example: 61f67b7d5b4971badae787cc
+        user_id:
+          type: integer
+          example: 1
+        email:
+          type: string
+          example: admin@gmail.com
+        uname:
+          type: string
+          example: admin
+        password:
+          type: string
+          example: mypassword
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+              
