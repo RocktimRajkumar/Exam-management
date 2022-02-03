@@ -18,6 +18,7 @@ info:
 
 schemes: [http,https]
 
+# ------------------ API Path Start ---------------------------#
 paths:
   /:
     get:
@@ -29,7 +30,8 @@ paths:
           schema:
             type: string
             example: Hello World, from express
-    
+
+  # --------------------------- ADMIN ------------------------------ 
   /admin:
     get:
       summary: Get all admins
@@ -221,6 +223,7 @@ paths:
                     type: string
                     example: Username or Password not correct
 
+  # --------------------------- STUDENT ------------------------------
   /student:
     get:
       summary: Get Student
@@ -385,6 +388,7 @@ paths:
                     type: string
                     example: Username or Password not correct
 
+  # --------------------------- DEPARTMENT ------------------------------
   /department:
     get:
       summary: Get Department
@@ -409,8 +413,8 @@ paths:
                     type: integer
                     example: 1
     post:
-      summary: Get Department
-      description: Retrieve list of all department
+      summary: Create Department
+      description: Create a new department
       tags:
         - department
       produces:
@@ -462,8 +466,8 @@ paths:
                         example: Dept Code already present!
   /department/{id}:
     put:
-      summary: Get Department
-      description: Retrieve list of all department
+      summary: Update Department by ID
+      description: Update existing department by providing the existing ID of department
       tags:
         - department
       parameters:
@@ -521,8 +525,161 @@ paths:
                     type: object
                     $ref: "#/components/schemas/Department"
 
+  # --------------------------- COURSE ------------------------------
+  /course:
+    get:
+      summary: Get Course
+      description: Retrieve list of all courses
+      tags:
+        - course
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/Course"
+                  count:
+                    type: integer
+                    example: 1
+    post:
+      summary: Create Course
+      description: Create a new Course under department
+      tags:
+        - course
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: course
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: Bachelor of Mathematics
+              code:
+                type: string
+                required: true
+                example: BSC-Math
+              dept_id:
+                type: integer
+                required: true
+                example: 5
+              duration:
+                type: integer
+                required: true
+                example: 3
+      responses:
+        200:
+          description: New Course created
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Course Created
+                  dept_id:
+                    type: number
+                    example: 3
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Course Code already present!
+  /course/{id}:
+    put:
+      summary: Update Course
+      description: Update an existing course detail by providing the course ID
+      tags:
+        - course
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: course
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: MEC ENG
+              dept_id:
+                type: integer
+                required: true
+                example: 2
+              duration:
+                type: integer
+                required: true
+                example: 4
+              is_active:
+                type: boolean
+                example: true
+                required: false
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+    get:
+      summary: Get Course by ID
+      description: Get Course detail by providing course ID in the URL path
+      tags:
+        - course
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/Course"
 
-# Define components for reuse
+
+# ---------------------- Define components for reuse -------------------
 components:
   schemas:
     Student:
@@ -587,6 +744,7 @@ components:
           description: created_date
           example: 2022-01-30T11:50:21.867Z
           format: date-time
+
     StudentPost:
       properties:
         name:
@@ -630,6 +788,7 @@ components:
         pwd:
           type: string
           example: I am black widow
+
     StudentPut:
       properties:
         name:
@@ -670,6 +829,7 @@ components:
         is_active:
           type: boolean
           example: false
+
     Admin:
       properties:
         _id:
@@ -700,6 +860,7 @@ components:
           description: created_date
           example: 2022-01-30T11:50:21.867Z
           format: date-time
+
     Department:
       properties:
         _id:
@@ -714,6 +875,40 @@ components:
         dept_code:
           type: string
           example: CSE
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-01-30T11:50:21.867Z
+          format: date-time
+
+    Course:
+      properties:
+        _id:
+          type: string
+          example: 61fad4249216fd31d229745f
+        course_id:
+          type: integer
+          example: 1
+        course_name:
+          type: string
+          example: Bachelor of Computer Application
+        course_code:
+          type: string
+          example: BCA
+        course_duration:
+          type: integer
+          example: 3
+        dept_id:
+          type: integer
+          example: 1
         is_active:
           type: boolean
           example: true
