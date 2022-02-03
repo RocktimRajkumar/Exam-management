@@ -51,6 +51,8 @@ exports.update = async (d_id, data) => {
     try {
         let update_data = {
             course_name: data.body.name,
+            course_duration: data.body.duration,
+            dept_id: data.body.dept_id,
             is_active: data.body.is_active,
             updated_date: new Date
         };

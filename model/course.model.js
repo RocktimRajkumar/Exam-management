@@ -21,7 +21,6 @@ const CourseSchema = mongoose.Schema({
     dept_id: {
         type: Number,
         required: true,
-        unique: true
     },
     is_active: {
         type: Boolean,
