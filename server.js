@@ -24,5 +24,6 @@ app.get('/', (req, res) => {
 require("./routes/admin.routes")(app);
 require("./routes/student.routes")(app);
 require("./routes/department.routes")(app);
+require("./routes/course.routes")(app);
 
 app.listen(port, () => console.log(`Hello world app listening on port ${port}!`))
