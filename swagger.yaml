@@ -52,6 +52,9 @@ paths:
                     items:
                       type: object
                       $ref: "#/components/schemas/Admin"
+                  count:
+                    type: integer
+                    example: 4
     post:
       summary: Create admin
       description: Use to insert a admin user
@@ -678,6 +681,147 @@ paths:
                     type: object
                     $ref: "#/components/schemas/Course"
 
+  # --------------------------- SEMESTER ------------------------------
+  /semester:
+    get:
+      summary: Get Semester
+      description: Retrieve list of all semester
+      tags:
+        - semester
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/Semester"
+                  count:
+                    type: integer
+                    example: 1
+    post:
+      summary: Create Semester
+      description: Create a new semester
+      tags:
+        - semester
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: semester
+          schema:
+            type: object
+            properties:
+              no:
+                type: number
+                required: true
+                example: 2
+              course_id:
+                type: number
+                required: true
+                example: 1
+      responses:
+        200:
+          description: New Semester created
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Semester Created
+                  sem_id:
+                    type: number
+                    example: 2
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Semester 3 for following course already present!
+  /semester/{id}:
+    put:
+      summary: Update Semester by ID
+      description: Update existing semester by providing the existing ID of semester
+      tags:
+        - semester
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: semester
+          schema:
+            type: object
+            properties:
+              no:
+                type: number
+                required: true
+                example: 4
+              course_id:
+                type: number
+                required: true
+                example: 5
+              is_active:
+                type: boolean
+                example: true
+                required: false
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+    get:
+      summary: Get Semester by ID
+      description: Get Semester detail by providing semester ID in the URL path
+      tags:
+        - semester
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/Semester"  
+
 
 # ---------------------- Define components for reuse -------------------
 components:
@@ -921,5 +1065,33 @@ components:
           type: string
           description: created_date
           example: 2022-01-30T11:50:21.867Z
+          format: date-time
+
+    Semester:
+      properties:
+        _id:
+          type: string
+          example: 61fad4249216fd78d229745f
+        sem_id:
+          type: integer
+          example: 5
+        sem_no:
+          type: integer
+          example: 3
+        course_id:
+          type: integer
+          example: 3
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-02-17T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-02-17T11:50:21.867Z
           format: date-time
               
