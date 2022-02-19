@@ -822,6 +822,161 @@ paths:
                     type: object
                     $ref: "#/components/schemas/Semester"  
 
+  # --------------------------- SUBJECT ------------------------------
+  /subject:
+    get:
+      summary: Get Subject
+      description: Retrieve list of all subject
+      tags:
+        - subject
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/Subject"
+                  count:
+                    type: integer
+                    example: 1
+    post:
+      summary: Create Subject
+      description: Create a new subject by providing existing semester id
+      tags:
+        - subject
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: subject
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: OOPS
+              semester_id:
+                type: number
+                required: true
+                example: 3
+      responses:
+        200:
+          description: New Subject created
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Subject Created
+                  sem_id:
+                    type: number
+                    example: 2
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Subject Math already present for semester 4!
+        404:
+          description: Semester Not found
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Semester not found for 3!
+  /subject/{id}:
+    put:
+      summary: Update Subject by ID
+      description: Update existing subject by providing the existing ID of subject
+      tags:
+        - subject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: subject
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                required: true
+                example: Chemistry
+              semester_id:
+                type: number
+                required: true
+                example: 5
+              is_active:
+                type: boolean
+                example: true
+                required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+    get:
+      summary: Get Subject by ID
+      description: Get Subject detail by providing subject ID in the URL path
+      tags:
+        - subject
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/Subject"  
+
 
 # ---------------------- Define components for reuse -------------------
 components:
@@ -1079,6 +1234,34 @@ components:
           type: integer
           example: 3
         course_id:
+          type: integer
+          example: 3
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-02-17T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-02-17T11:50:21.867Z
+          format: date-time
+
+    Subject:
+      properties:
+        _id:
+          type: string
+          example: 61fad4249216fd78d229745f
+        sub_id:
+          type: integer
+          example: 5
+        sub_name:
+          type: string
+          example: Physics
+        semester_id:
           type: integer
           example: 3
         is_active:

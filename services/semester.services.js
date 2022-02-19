@@ -67,3 +67,9 @@ const semCourseExists = async (sem_no, course_id) => {
     else
         return false
 }
+
+exports.validateSemesterId = async(sem_id) => {
+    sem = await Semester.findOne({sem_id: sem_id});
+    if (sem == null)
+        throw {"message": "Semester not found for "+sem_id+"!"};
+}
