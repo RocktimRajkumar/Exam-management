@@ -977,6 +977,262 @@ paths:
                     type: object
                     $ref: "#/components/schemas/Subject"  
 
+  # --------------------------- MARKSHEET ------------------------------
+  /marksheet:
+    get:
+      summary: Get MarkSheet
+      description: Retrieve list of all marksheet
+      tags:
+        - marksheet
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/MarkSheet"
+                  count:
+                    type: integer
+                    example: 1
+    post:
+      summary: Create MarkSheet
+      description: Create a new marksheet by providing existing semester id
+      tags:
+        - marksheet
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: marksheet
+          schema:
+            type: object
+            properties:
+              student_id:
+                type: number
+                required: true
+                example: 3
+              sub_id:
+                type: number
+                required: true
+                example: 2
+              mark:
+                type: number
+                required: true
+                example: 67
+      responses:
+        200:
+          description: New MarkSheet created
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: MarkSheet Created
+                  mark_id:
+                    type: number
+                    example: 2
+        400:
+          description: Already exists
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Marks already present for student 4 for subject 2!
+        404:
+          description: Invalid
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+                properties:
+                  message:
+                    type: object
+                    properties:
+                      Success:
+                        type: string
+                        example: Student Id or Subject Id not found!
+  /marksheet/{id}:
+    put:
+      summary: Update MarkSheet by ID
+      description: Update existing marksheet by providing the existing ID of marksheet
+      tags:
+        - marksheet
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: body
+          name: marksheet
+          schema:
+            type: object
+            properties:
+              mark:
+                type: number
+                required: true
+                example: 67
+              is_active:
+                type: boolean
+                example: true
+                required: true
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  Success:
+                    type: string
+                    example: Updated
+    get:
+      summary: Get MarkSheet by ID
+      description: Get MarkSheet detail by providing marksheet ID in the URL path
+      tags:
+        - marksheet
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/MarkSheet"
+
+  /marksheet/{stud_id}/sub/{sub_id}:
+    get:
+      summary: Get Student MarkSheet by subject
+      description: Get MarkSheet detail by providing student_id and sub_id
+      tags:
+        - marksheet
+      parameters:
+        - in: path
+          name: stud_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - in: path
+          name: sub_id
+          required: true
+          schema:
+            type: integer
+            example: 3
+
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  record:
+                    type: object
+                    $ref: "#/components/schemas/MarkSheetReport"
+
+  /marksheet/{stud_id}/sem/{sem_no}:
+    get:
+      summary: Get Student MarkSheet by Semester 
+      description: Get MarkSheet detail by providing student_id and semester_no
+      tags:
+        - marksheet
+      parameters:
+        - in: path
+          name: stud_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - in: path
+          name: sem_no
+          required: true
+          schema:
+            type: integer
+            example: 2
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/MarkSheetReport"
+                  cgpa:
+                    type: integer
+                    example: 71.2
+
+  /marksheet/{stud_id}/report:
+    get:
+      summary: Get Student MarkSheet Report
+      description: Get MarkSheet Report by providing student_id
+      tags:
+        - marksheet
+      parameters:
+        - in: path
+          name: stud_id
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        200:
+          description: Success
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+                properties:
+                  records:
+                    type: array
+                    items:
+                      type: object
+                      $ref: "#/components/schemas/MarkSheetReport"
+                  cgpa:
+                    type: integer
+                    example: 71.2 
+
 
 # ---------------------- Define components for reuse -------------------
 components:
@@ -1277,4 +1533,56 @@ components:
           description: created_date
           example: 2022-02-17T11:50:21.867Z
           format: date-time
+
+    MarkSheet:
+      properties:
+        _id:
+          type: string
+          example: 61fad4249216fd78d229745f
+        mark_id:
+          type: integer
+          example: 2
+        student_id:
+          type: integer
+          example: 4
+        sub_id:
+          type: integer
+          example: 3
+        mark:
+          type: integer
+          example: 76
+        is_active:
+          type: boolean
+          example: true
+        created_date:
+          type: string
+          description: created_date
+          example: 2022-02-17T11:50:21.867Z
+          format: date-time
+        updated_date:
+          type: string
+          description: created_date
+          example: 2022-02-17T11:50:21.867Z
+          format: date-time
+
+    MarkSheetReport:
+      properties:
+        _id:
+          type: string
+          example: 61fad4249216fd78d229745f
+        student_id:
+          type: integer
+          example: 4
+        sub_id:
+          type: integer
+          example: 3
+        mark:
+          type: integer
+          example: 76
+        subject_name:
+          type: string
+          example: c++
+        semester_no:
+          type: number
+          example: 2
               

@@ -27,5 +27,6 @@ require("./routes/department.routes")(app);
 require("./routes/course.routes")(app);
 require("./routes/semester.routes")(app);
 require("./routes/subject.routes")(app);
+require("./routes/mark_sheet.routes")(app);
 
 app.listen(port, () => console.log(`Hello world app listening on port ${port}!`))
