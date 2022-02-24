@@ -1532,6 +1532,12 @@ components:
         semester_id:
           type: integer
           example: 3
+        semester_no:
+          type: integer
+          example: 4
+        course_code:
+          type: string
+          example: BSC-IT
         is_active:
           type: boolean
           example: true

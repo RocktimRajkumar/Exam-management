@@ -45,6 +45,7 @@ exports.findAll = async () => {
                 course_id : 2,
                 course_name : 3,
                 course_code: 4,
+                course_duration: 10,
                 dept_id: 5,
                 dept_code: "$dept.dept_code",
                 is_active: 7,
@@ -57,28 +58,7 @@ exports.findAll = async () => {
 }
 
 exports.findById = async (course_id) => {
-    course = await Course.aggregate([
-        {$lookup:{from:"departments",localField:"dept_id",foreignField:"dept_id",as:"dept"}},
-        { $unwind:"$dept" },
-        {
-            $match:{
-                $and:[{"course_id" : parseInt(course_id)}]
-            }
-        },
-        {   
-            $project:{
-                _id: 1,
-                course_id : 2,
-                course_name : 3,
-                course_code: 4,
-                dept_id: 5,
-                dept_code: "$dept.dept_code",
-                is_active: 7,
-                created_date: 8,
-                updated_date: 9
-            } 
-        }]);
-    // course = await Course.findOne({ course_id: course_id });
+    course = await Course.findOne({ course_id: course_id });
     return { "record": course }
 }
 

@@ -54,26 +54,7 @@ exports.findAll = async () => {
 }
 
 exports.findById = async (sem_id) => {
-    sem = await Semester.aggregate([
-        {$lookup:{from:"courses",localField:"course_id",foreignField:"course_id",as:"course"}},
-        { $unwind:"$course" },
-        {
-            $match:{
-                $and:[{"sem_id" : parseInt(sem_id)}]
-            }
-        },
-        {   
-            $project:{
-                _id: 1,
-                sem_id : 2,
-                sem_no : 3,
-                course_id: 4,
-                course_code: "$course.course_code",
-                is_active: 7,
-                created_date: 8,
-                updated_date: 9
-            } 
-        }]);
+    sem = await Semester.findOne({ sem_id: sem_id });
     return { "record": sem }
 }
 
