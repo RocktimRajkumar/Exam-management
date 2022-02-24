@@ -57,7 +57,7 @@ exports.findById = async (user_id) => {
 exports.checkUserNamePwd = async (email, pwd) => {
     student = await Student.findOne({ email: email, password: pwd, is_active: true });
     if (student)
-        return { "Login": "Success" }
+        return { "Login": "Success", "id": student.student_id}
     else
         throw { "Login": "Username or Password not correct" }
 }

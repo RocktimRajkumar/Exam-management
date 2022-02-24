@@ -214,6 +214,9 @@ paths:
                   Login:
                     type: string
                     example: Success
+                  id:
+                    type: number
+                    example: 1
         401:
           description: LogIn Failed
           schema:
@@ -379,6 +382,9 @@ paths:
                   Login:
                     type: string
                     example: Success
+                  id:
+                    type: number
+                    example: 5
         401:
           description: LogIn Failed
           schema:
@@ -1464,6 +1470,9 @@ components:
         dept_id:
           type: integer
           example: 1
+        dept_code:
+          type: string
+          example: CSE
         is_active:
           type: boolean
           example: true
@@ -1492,6 +1501,9 @@ components:
         course_id:
           type: integer
           example: 3
+        course_code:
+          type: string
+          example: BCA
         is_active:
           type: boolean
           example: true

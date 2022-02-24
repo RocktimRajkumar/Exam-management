@@ -48,7 +48,7 @@ exports.findById = async (user_id) => {
 exports.checkUserNamePwd = async (email, pwd) => {
     admin = await Admin.findOne({ email: email, password: pwd });
     if (admin)
-        return { "Login": "Success" }
+        return { "Login": "Success", "id": admin.user_id }
     else
         throw { "Login": "Username or Password not correct" }
 }
