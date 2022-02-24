@@ -34,7 +34,29 @@ exports.create = async (data) => {
 };
 
 exports.findAll = async () => {
-    sub = await Subject.find();
+    sub = await Subject.aggregate([
+        {$lookup:{from:"semesters",localField:"semester_id",foreignField:"sem_id",as:"sem"}},
+        { $unwind:"$sem" },
+        {$lookup:{from:"courses",localField:"sem.course_id",foreignField:"course_id",as:"course"}},
+        { $unwind:"$course" },
+        {
+            $sort:{
+                    'sem.sem_no':1
+            }
+        },
+        {   
+            $project:{
+                _id: 1,
+                sub_id : 2,
+                sub_name : 3,
+                semester_id: 4,
+                semester_no: "$sem.sem_no",
+                course_code: "$course.course_code",
+                is_active: 7,
+                created_date: 8,
+                updated_date: 9
+            } 
+        }]);
     count = await Subject.find().count()
     return { "records": sub, "count": count }
 }
