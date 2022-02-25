@@ -125,6 +125,8 @@ exports.student_marksheet = async (student_id) => {
         { $unwind:"$subject" },
         {$lookup:{from:"semesters",localField:"subject.semester_id",foreignField:"sem_id",as:"semester"}},
         { $unwind:"$semester" },
+        {$lookup:{from:"courses",localField:"semester.course_id",foreignField:"course_id",as:"course"}},
+        { $unwind:"$course" },
         {
             $match:{
                 $and:[{"student_id" : parseInt(student_id)}]
@@ -135,6 +137,7 @@ exports.student_marksheet = async (student_id) => {
                 student_id : 1,
                 mark : 40,
                 sub_id: 3,
+                course: "$course.course_code",
                 subjects_name : "$subject.sub_name",
                 semester_no : "$semester.sem_no",
             } 
@@ -143,8 +146,9 @@ exports.student_marksheet = async (student_id) => {
     total_subj = marksheet.length
     percentage = total_marks/total_subj
     cgpa = CGPA(percentage)
-
-    return { "records": marksheet, "cgpa": cgpa }
+    student = await Student.findById(student_id)
+    console.log(student)
+    return { "records": marksheet, "cgpa": cgpa, "name": student["record"]["s_name"] }
 }
 
 const marksExists = async (student_id, sub_id) => {
