@@ -1003,7 +1003,7 @@ paths:
                     type: array
                     items:
                       type: object
-                      $ref: "#/components/schemas/MarkSheet"
+                      $ref: "#/components/schemas/MarkSheetALL"
                   count:
                     type: integer
                     example: 1
@@ -1603,4 +1603,31 @@ components:
         semester_no:
           type: number
           example: 2
+
+    MarkSheetALL:
+      properties:
+        _id:
+          type: object
+          properties:
+            student_name:
+              type: string
+              example: Jonathan
+            student_id:
+              type: integer
+              example: 2
+            status:
+              type: string
+              example: true
+        count:
+          type: integer
+          example: 3
+        total:
+          type: integer
+          example: 171
+        percentage:
+          type: integer
+          example: 57
+        cgpa:
+          type: integer
+          example: 6.0
               

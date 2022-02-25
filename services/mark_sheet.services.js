@@ -39,8 +39,27 @@ exports.create = async (data) => {
 };
 
 exports.findAll = async () => {
-    sub = await MarkSheet.find();
-    count = await MarkSheet.find().count()
+    sub = await MarkSheet.aggregate([
+        {$lookup:{from:"students",localField:"student_id",foreignField:"student_id",as:"student"}},
+        { $unwind:"$student" },
+        {
+            $match:{
+                "is_active" : true
+            }
+        },
+        {
+            $group:{
+                _id: {student_name: "$student.s_name", student_id: "$student_id",status: "$is_active"},
+                total:{$sum: "$mark"},
+                count:{$sum:1}
+            }
+        },
+        {
+            $project:{"count":"$count","total":"$total","percentage":{"$divide":["$total","$count"]},"cgpa": {"$divide":[{"$divide":["$total","$count"]},9.5]}           
+            }
+        }
+        ]);
+    count = sub.length
     return { "records": sub, "count": count }
 }
 
